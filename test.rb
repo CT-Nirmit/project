@@ -1,34 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Ruby Programming Language</title>
-    <script type="text/javascript">
-      var languages = {
-        "de":    "de",
-        "es":    "es",
-        "id":    "id",
-        "ja":    "ja",
-        "ko":    "ko",
-        "pt":    "pt",
-        "tr":    "tr",
-        "zh-CN": "zh_cn",
-        "zh-TW": "zh_tw"
-      };
+require 'open-uri'
+require 'net/http'
+require 'json'
 
-      var code = window.navigator.language || window.navigator.userLanguage || "en";
-      if (code.substr(0,2) !== "zh") { code = code.substr(0,2); }
+url = "https://www.ruby-lang.org/"
+uri = URI.parse(url)
+response = Net::HTTP.get_response(uri)
+puts response.body
 
-      var language = languages[code];
-      if (!language) { language = "en"; }
 
-      document.location = "/" + language + "/";
-    </script>
-    <noscript>
-      <meta http-equiv="refresh" content="0; url=/en/">
-    </noscript>
-  </head>
-  <body>
-    <p><a href="/en/">Click here</a> to be redirected.</p>
-  </body>
-</html>
+begin
+  file = File.open("/home/ubuntu/Downloads/newfile.txt", "w")
+  file.write(response.body) 
+rescue IOError => e
+  puts e
+ensure
+  file.close unless file.nil?
+end
+
